@@ -1,5 +1,6 @@
-﻿using Shared.Audit;
+﻿using DDD_CQRS_Sample.Domain.Products.Events;
 using Shared.Entities;
+using Shared.Results;
 
 namespace DDD_CQRS_Sample.Domain.Products;
 
@@ -74,5 +75,23 @@ public class Product : BaseEntity, IAuditable
     public void RevertStatus()
     {
         IsActive = !IsActive;
+    }
+
+    public Result DecreaseInventory(int value)
+    {
+        var newInventory = Inventory - value;
+        if (newInventory < 0)
+        {
+            return Result.Failure(ProductErrors.NotEnoughInventory);
+        }
+
+        Inventory = newInventory;
+
+        if (newInventory < 10)
+        {
+            RaiseDomainEvent(new ProductInventoryDecreasedDomainEvent(Id));
+        }
+
+        return Result.Success();
     }
 }

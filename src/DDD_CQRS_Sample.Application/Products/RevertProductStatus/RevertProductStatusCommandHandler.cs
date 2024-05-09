@@ -1,5 +1,5 @@
 ﻿using DDD_CQRS_Sample.Domain.Products;
-using Shared.DbContexts;
+using Shared.Data;
 using Shared.MediatR.Messaging;
 using Shared.Results;
 

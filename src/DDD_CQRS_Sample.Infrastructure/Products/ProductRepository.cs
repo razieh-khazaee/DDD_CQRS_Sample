@@ -1,11 +1,12 @@
 ﻿using DDD_CQRS_Sample.Application.Products;
 using DDD_CQRS_Sample.Application.Products.GeProductById;
 using DDD_CQRS_Sample.Application.Products.GetProductList;
+using DDD_CQRS_Sample.Application.Products.Shared;
 using DDD_CQRS_Sample.Domain.Products;
 using DDD_CQRS_Sample.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using Shared.Audit;
 using Shared.DataGrids;
+using Shared.Entities;
 
 namespace DDD_CQRS_Sample.Infrastructure.Products;
 
@@ -39,12 +40,12 @@ internal class ProductRepository : IProductRepository
                      m.Description,
                      m.Price,
                      m.Inventory,
-                     m.ExtraInfos.ToList(),
+                     m.ExtraInfos.Select(m => new ExtraInfoDto(m.Key, m.Value)).ToList(),
                      m.IsActive,
                      EF.Property<string>(m, AuditConstants.CreatedBy),
-                     EF.Property<DateTime>(m, AuditConstants.CreatedDate),
+                     EF.Property<DateTime>(m, AuditConstants.CreatedOn),
                      EF.Property<string>(m, AuditConstants.UpdatedBy),
-                     EF.Property<DateTime?>(m, AuditConstants.UpdatedDate)))
+                     EF.Property<DateTime?>(m, AuditConstants.UpdatedOn)))
             .FirstOrDefaultAsync(cancellationToken);
     }
 

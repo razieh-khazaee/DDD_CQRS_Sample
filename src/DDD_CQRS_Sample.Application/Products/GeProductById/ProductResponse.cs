@@ -1,4 +1,4 @@
-﻿using DDD_CQRS_Sample.Domain.Products;
+﻿using DDD_CQRS_Sample.Application.Products.Shared;
 
 namespace DDD_CQRS_Sample.Application.Products.GeProductById;
 
@@ -9,7 +9,7 @@ public record ProductResponse(
     string? Description,
     decimal Price,
     int Inventory,
-    List<ExtraInfoValueObject> extraInfos,
+    List<ExtraInfoDto> extraInfos,
     bool IsActive,
     string CreatedBy,
     DateTime CreatedDate,

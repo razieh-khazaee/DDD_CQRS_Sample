@@ -4,6 +4,7 @@ using DDD_CQRS_Sample.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DDD_CQRS_Sample.Infrastructure.Migrations
 {
     [DbContext(typeof(DDD_CQRS_SampleDbContext))]
-    partial class DDD_CQRS_SampleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507194940_RenameCreatedDate_UpdatedDate_Fields")]
+    partial class RenameCreatedDate_UpdatedDate_Fields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,10 +1,10 @@
-﻿namespace Shared.Audit
+﻿namespace Shared.Entities
 {
     public class AuditConstants
     {
         public const string CreatedBy = "CreatedBy";
-        public const string CreatedDate = "CreatedDate";
+        public const string CreatedOn = "CreatedOn";
         public const string UpdatedBy = "UpdatedBy";
-        public const string UpdatedDate = "UpdatedDate";
+        public const string UpdatedOn = "UpdatedOn";
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Shared.DbContexts;
+﻿namespace Shared.Data;
 
 public interface IUnitOfWork
 {

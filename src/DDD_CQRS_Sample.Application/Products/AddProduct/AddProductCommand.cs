@@ -1,4 +1,4 @@
-﻿using DDD_CQRS_Sample.Domain.Products;
+﻿using DDD_CQRS_Sample.Application.Products.Shared;
 using Shared.MediatR.Messaging;
 
 namespace DDD_CQRS_Sample.Application.Products.AddProduct;
@@ -9,4 +9,4 @@ public record AddProductCommand(
     string Description,
     decimal Price,
     int? ImageId,
-    List<ExtraInfoValueObject> ExtraInfos) : ICommand;
+    List<ExtraInfoDto> ExtraInfos) : ICommand;

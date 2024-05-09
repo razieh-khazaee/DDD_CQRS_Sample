@@ -1,8 +1,8 @@
 ﻿using DDD_CQRS_Sample.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
-namespace DDD_CQRS_Sample.Api.Extensions;
+namespace DDD_CQRS_Sample.Api.Infrastructure.Extensions;
 
-internal static class ApplicationBuilderExtensions
+internal static class MigrationExtensions
 {
     public static void ApplyMigrations(this IApplicationBuilder app)
     {

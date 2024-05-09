@@ -1,4 +1,4 @@
-﻿namespace Shared.Audit
+﻿namespace Shared.Entities
 {
     public interface IAuditable
     {

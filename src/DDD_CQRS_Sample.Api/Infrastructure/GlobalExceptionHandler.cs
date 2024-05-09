@@ -2,7 +2,7 @@
 using Shared.Exceptions;
 using Shared.Results;
 
-namespace DDD_CQRS_Sample.Api.Middleware
+namespace DDD_CQRS_Sample.Api.Infrastructure
 {
     public class GlobalExceptionHandler() : IExceptionHandler
     {

@@ -1,5 +1,5 @@
 ﻿using DDD_CQRS_Sample.Domain.Products;
-using Shared.DbContexts;
+using Shared.Data;
 using Shared.MediatR.Messaging;
 using Shared.Results;
 
@@ -33,7 +33,7 @@ internal class AddProductCommandHandler : ICommandHandler<AddProductCommand>
             request.Description,
             request.Price,
             request.ImageId,
-            request.ExtraInfos);
+            request.ExtraInfos.Select(m => new ExtraInfoValueObject(m.Key, m.Value)).ToList());
 
         _productRepository.Add(product);
 

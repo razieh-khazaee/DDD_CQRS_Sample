@@ -1,26 +1,20 @@
-using DDD_CQRS_Sample.Api.Extensions;
-using DDD_CQRS_Sample.Api.Middleware;
+using DDD_CQRS_Sample.Api.Infrastructure.Extensions;
 using DDD_CQRS_Sample.Application;
 using DDD_CQRS_Sample.Infrastructure;
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Hangfire;
+using Shared.JobInstaller;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
+builder.Services
+    .AddPresentation()
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration, builder.Environment);
 
-builder.Services.AddControllers();
+WebApplication app = builder.Build();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddFluentValidationRulesToSwagger();
+app.UseExceptionHandler();
 
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -29,12 +23,40 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-app.UseExceptionHandler();
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.MapControllers();
 
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+
+});
+
+#region Run JobInstallers
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+    var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+    var moduleInstallers = assemblies.SelectMany(m => m.DefinedTypes).Where(type => typeof(IJobInstaller)
+                                                .IsAssignableFrom(type) &&
+                                                !type.IsInterface &&
+                                                !type.IsAbstract)
+                        .Select(Activator.CreateInstance)
+                        .Cast<IJobInstaller>()
+                        .ToList();
+
+    moduleInstallers.ForEach(m => m.Install(services));
+}
+#endregion
+
+
 app.Run();
+
+

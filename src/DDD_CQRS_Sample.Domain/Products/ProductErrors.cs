@@ -11,4 +11,6 @@ public static class ProductErrors
     public static readonly Error NotFound = new(
         "Product.NotFound",
         "محصول مورد نظر وجود ندارد");
+
+    public static readonly Error NotEnoughInventory = new Error("Product.NotEnoughInventory", "موجودی کالا کافی نمی باشد");
 }

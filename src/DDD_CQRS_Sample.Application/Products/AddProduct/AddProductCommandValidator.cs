@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using DDD_CQRS_Sample.Application.Products.Shared;
+using FluentValidation;
 
 namespace DDD_CQRS_Sample.Application.Products.AddProduct;
 
@@ -18,5 +19,8 @@ internal class AddProductCommandValidator : AbstractValidator<AddProductCommand>
         RuleFor(m => m.ImageId)
            .GreaterThan(0)
            .When(m => m != null);
+
+        RuleForEach(m => m.ExtraInfos)
+            .SetValidator(new ExtraInfoDtoValidator());
     }
 }
