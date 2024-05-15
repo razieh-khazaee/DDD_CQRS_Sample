@@ -1,5 +1,4 @@
-﻿using Hangfire;
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 namespace DDD_CQRS_Sample.Api.Infrastructure.Extensions
 {
@@ -16,8 +15,6 @@ namespace DDD_CQRS_Sample.Api.Infrastructure.Extensions
             services.AddSwaggerGen();
             services.AddFluentValidationRulesToSwagger();
             services.AddHttpContextAccessor();
-
-            services.AddHangfireServer();
 
             return services;
         }

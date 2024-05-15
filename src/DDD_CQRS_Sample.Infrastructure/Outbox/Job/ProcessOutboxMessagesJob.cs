@@ -10,7 +10,7 @@ using System.Data;
 
 namespace DDD_CQRS_Sample.Infrastructure.Outbox.Job;
 
-public class ProcessOutboxMessagesJob
+public class ProcessOutboxMessagesJob : IProcessOutboxMessagesJob
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
     private readonly IPublisher _publisher;

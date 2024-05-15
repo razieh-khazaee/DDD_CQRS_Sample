@@ -2,7 +2,6 @@ using DDD_CQRS_Sample.Api.Infrastructure.Extensions;
 using DDD_CQRS_Sample.Application;
 using DDD_CQRS_Sample.Infrastructure;
 using Hangfire;
-using Shared.JobInstaller;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -35,27 +34,10 @@ app.UseAuthorization();
 
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-
+    Authorization = []
 });
 
-#region Run JobInstallers
-
-using (var serviceScope = app.Services.CreateScope())
-{
-    var services = serviceScope.ServiceProvider;
-    var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-    var moduleInstallers = assemblies.SelectMany(m => m.DefinedTypes).Where(type => typeof(IJobInstaller)
-                                                .IsAssignableFrom(type) &&
-                                                !type.IsInterface &&
-                                                !type.IsAbstract)
-                        .Select(Activator.CreateInstance)
-                        .Cast<IJobInstaller>()
-                        .ToList();
-
-    moduleInstallers.ForEach(m => m.Install(services));
-}
-#endregion
-
+app.UseBackgroundJobs();
 
 app.Run();
 

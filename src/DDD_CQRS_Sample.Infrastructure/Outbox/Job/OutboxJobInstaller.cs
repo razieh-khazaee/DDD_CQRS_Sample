@@ -11,8 +11,7 @@ namespace DDD_CQRS_Sample.Infrastructure.Outbox.Job
         public void Install(IServiceProvider serviceProvider)
         {
             var config = serviceProvider.GetRequiredService<IOptions<OutboxOptions>>().Value;
-            var processOutboxJob = serviceProvider.GetRequiredService<ProcessOutboxMessagesJob>();
-            RecurringJob.AddOrUpdate($"ProcessOutboxMessages", () => processOutboxJob.Execute(), $"0/{config.IntervalInSeconds} * * * * *");
+            RecurringJob.AddOrUpdate<IProcessOutboxMessagesJob>("ProcessOutboxMessages", job => job.Execute(), config.Schedule);
         }
     }
 }

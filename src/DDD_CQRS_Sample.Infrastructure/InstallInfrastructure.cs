@@ -4,7 +4,6 @@ using DDD_CQRS_Sample.Infrastructure.Email;
 using DDD_CQRS_Sample.Infrastructure.Outbox.Job;
 using DDD_CQRS_Sample.Infrastructure.Outbox.Settings;
 using Hangfire;
-using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -42,22 +41,19 @@ public static class InstallInfrastructure
         string hangfireConnectionString = configuration.GetConnectionString("Hangfire") ?? throw new ArgumentNullException(nameof(configuration));
         services.AddHangfire(m =>
         {
-            m.UseSqlServerStorage(hangfireConnectionString, new SqlServerStorageOptions
-            {
-                SchemaName = environment.EnvironmentName
-            });
+            m.UseSqlServerStorage(hangfireConnectionString);
             m.SetDataCompatibilityLevel(CompatibilityLevel.Version_180);
         });
         services.AddHangfireServer(m =>
         {
-            //m.SchedulePollingInterval : default: 15 second
+            m.SchedulePollingInterval = TimeSpan.FromSeconds(1);
         });
 
         #endregion
 
         #region Outbox
 
-        services.AddScoped<ProcessOutboxMessagesJob>();
+        services.AddScoped<IProcessOutboxMessagesJob, ProcessOutboxMessagesJob>();
         services.AddOptions<OutboxOptions>()
                .Bind(configuration.GetSection("Outbox"))
                .ValidateDataAnnotations()
